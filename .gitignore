@@ -1,0 +1,23 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ArduPilot build artifacts (submodule stays tracked)
+ardupilot/build/
+ardupilot/logs/
+*.tlog
+*.rlog
+
+# macOS
+.DS_Store
+
+# Local overrides
+.env
+*.local
+
+# IDE
+.idea/
+.vscode/

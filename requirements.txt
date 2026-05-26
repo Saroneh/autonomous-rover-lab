@@ -1,0 +1,8 @@
+# Python 3.9 only — DroneKit 2.9.x is incompatible with 3.10+
+dronekit==2.9.2
+mavproxy==1.8.74
+pynmeagps==1.0.54
+empy==3.3.4
+future
+pexpect
+gnureadline

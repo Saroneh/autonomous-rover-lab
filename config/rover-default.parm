@@ -1,0 +1,24 @@
+# Starter parameters for autonomous-rover-lab (SITL + ride-on conversion).
+# Load via Mission Planner / QGC or: param load rover-default.parm
+#
+# Open decisions (Session A) — update before hardware:
+#   FRAME_TYPE: 0=skid, 1=ackermann (depends on ride-on mechanics)
+#   Battery: 12V vs 24V (affects ESC/H-bridge, not these params)
+
+# --- Rover frame (edit for your steering type) ---
+FRAME_TYPE,0
+
+# --- SITL-friendly defaults (Module 1) ---
+ARMING_CHECK,0
+FS_THR_ENABLE,0
+FS_GCS_ENABLE,0
+
+# --- Guided / mission (Module 5 outdoor) ---
+WPNAV_SPEED,200
+WPNAV_RADIUS,200
+WP_RADIUS,200
+
+# --- GPS / EKF (Module 3–5; uncomment when hardware connected) ---
+# GPS_TYPE,1
+# EK3_ENABLE,1
+# COMPASS_USE,1
