@@ -13,10 +13,9 @@ ARMING_CHECK,0
 FS_THR_ENABLE,0
 FS_GCS_ENABLE,0
 
-# --- Guided / mission (Module 5 outdoor) ---
-WPNAV_SPEED,200
-WPNAV_RADIUS,200
-WP_RADIUS,200
+# --- Mission (metres on ArduRover — NOT copter centimetres) ---
+WP_RADIUS,5
+WP_SPEED,1
 
 # --- GPS / EKF (Module 3–5; uncomment when hardware connected) ---
 # GPS_TYPE,1

@@ -82,11 +82,26 @@ else
 fi
 
 echo ""
-echo "--- Optional (Module 2+) ---"
+echo "--- Gazebo (Module 2) ---"
 if command -v gz >/dev/null 2>&1; then
   ok "gz $(gz sim --version 2>/dev/null | head -1 || echo 'installed')"
 else
-  echo "  --   Gazebo (gz) not installed — not needed for Module 1"
+  fail "gz not installed (brew install gz-harmonic)"
+fi
+GZ_ENV="${ROVER_PROJECT_ROOT}/sim/gazebo.env"
+if [[ -f "${GZ_ENV}" ]]; then
+  # shellcheck source=/dev/null
+  source "${GZ_ENV}"
+fi
+if [[ -d "${ARDUPILOT_GAZEBO_DIR:-}/build" ]]; then
+  ok "ardupilot_gazebo build"
+else
+  echo "  --   ardupilot_gazebo not built (${ARDUPILOT_GAZEBO_DIR:-~/ardupilot_gazebo})"
+fi
+if [[ -d "${SITL_MODELS_DIR:-}/Gazebo/worlds" ]]; then
+  ok "SITL_Models worlds"
+else
+  echo "  --   SITL_Models not cloned (${SITL_MODELS_DIR:-~/SITL_Models})"
 fi
 
 echo ""

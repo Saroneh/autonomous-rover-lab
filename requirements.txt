@@ -6,3 +6,6 @@ empy==3.3.4
 future
 pexpect
 gnureadline
+pillow
+opencv-python
+matplotlib

@@ -1,28 +1,32 @@
 #!/usr/bin/env bash
-# Start ArduRover SITL with MAVProxy (--console --map).
-# MAVProxy must stay connected to TCP 5760 or SITL blocks waiting for a GCS.
+# Terminal 3 (Module 2): ArduRover SITL + MAVProxy for Gazebo (JSON model).
 #
-# Usage: ./scripts/start_sitl.sh [extra sim_vehicle.py args]
+# Prerequisites:
+#   1) ./scripts/gazebo_server.sh   (wait for world + rover model)
+#   2) ./scripts/gazebo_gui.sh      (optional, for 3D view)
 #
-# Terminal 2 (after heartbeat): python scripts/run_hello.py
+# Usage: ./scripts/start_sitl_gazebo.sh [-w] [extra sim_vehicle.py args]
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=setup_rover.sh
 source "${SCRIPT_DIR}/setup_rover.sh"
+# shellcheck source=setup_gazebo.sh
+source "${SCRIPT_DIR}/setup_gazebo.sh"
 
 AP_DIR="${ROVER_PROJECT_ROOT}/ardupilot"
 if [[ ! -d "${AP_DIR}" ]]; then
   echo "ERROR: ardupilot/ not found." >&2
-  echo "  git submodule update --init --recursive" >&2
-  echo "  cd ardupilot && ./waf configure --board sitl && ./waf rover" >&2
   exit 1
 fi
-
 if [[ ! -f "${AP_DIR}/build/sitl/bin/ardurover" ]]; then
-  echo "ERROR: SITL binary not built. Run:" >&2
-  echo "  cd ardupilot && ./waf configure --board sitl && ./waf rover" >&2
+  echo "ERROR: ardurover not built." >&2
+  exit 1
+fi
+if [[ ! -d "${ARDUPILOT_GAZEBO_DIR}/build" ]]; then
+  echo "ERROR: ardupilot_gazebo not built at ${ARDUPILOT_GAZEBO_DIR}" >&2
+  echo "  See docs/module-2-gazebo.md" >&2
   exit 1
 fi
 
@@ -35,8 +39,6 @@ if [[ -f "${LOC_ENV}" ]]; then
   source "${LOC_ENV}"
   if [[ -n "${ROVER_HOME_LAT:-}" && -n "${ROVER_HOME_LNG:-}" && -n "${ROVER_HOME_ALT:-}" && -n "${ROVER_HOME_HEADING:-}" ]]; then
     CUSTOM_LOCATION="${ROVER_HOME_LAT},${ROVER_HOME_LNG},${ROVER_HOME_ALT},${ROVER_HOME_HEADING}"
-  else
-    echo "WARN: ${LOC_ENV} exists but is missing one of ROVER_HOME_LAT/LNG/ALT/HEADING; using default SITL location." >&2
   fi
 fi
 
@@ -45,8 +47,8 @@ if [[ -n "${CUSTOM_LOCATION}" ]]; then
   SIM_EXTRA_ARGS+=(--custom-location "${CUSTOM_LOCATION}")
 fi
 
-echo "Starting ArduRover SITL (frame: rover) — MAVProxy on UDP 14550"
-echo "  DroneKit: python scripts/run_hello.py"
+echo "Starting ArduRover SITL for Gazebo (frame: gazebo-rover, model: JSON)"
+echo "  Mission:  python scripts/run_mission.py"
 echo "  Stop:     ./scripts/stop_sim.sh"
 if [[ -n "${CUSTOM_LOCATION}" ]]; then
   echo "  Home:     ${CUSTOM_LOCATION}"
@@ -55,7 +57,8 @@ echo ""
 
 exec python Tools/autotest/sim_vehicle.py \
   -v Rover \
-  -f rover \
+  -f gazebo-rover \
+  --model JSON \
   --console \
   --map \
   "${SIM_EXTRA_ARGS[@]}" \

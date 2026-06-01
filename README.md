@@ -97,6 +97,35 @@ python scripts/run_hello.py
 - [ ] Same workflow: venv → `sim_vehicle` → MAVProxy → DroneKit
 - [ ] Repo ready for Module 2 (Gazebo) without restructuring
 
+## Module 2 — Gazebo + waypoint square
+
+Full guide: **[docs/module-2-gazebo.md](docs/module-2-gazebo.md)** (one-time `ardupilot_gazebo` + `SITL_Models` setup).  
+Summary: **[docs/module-2-summary.md](docs/module-2-summary.md)** (core concepts + gaderute-opgave).
+
+**Terminal 1** — Gazebo server:
+
+```bash
+./scripts/gazebo_server.sh
+```
+
+**Terminal 2** — Gazebo GUI:
+
+```bash
+./scripts/gazebo_gui.sh
+```
+
+**Terminal 3** — SITL for Gazebo:
+
+```bash
+./scripts/start_sitl_gazebo.sh -w
+```
+
+**Terminal 4** — AUTO mission:
+
+```bash
+python scripts/run_mission.py --mission missions/driveway_square.waypoints
+```
+
 ## Module roadmap
 
 | Module | Focus |

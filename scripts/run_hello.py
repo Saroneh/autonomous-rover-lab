@@ -23,7 +23,7 @@ from dronekit import connect, LocationGlobalRelative, VehicleMode
 def get_distance_metres(a, b):
     """Haversine distance between two LocationGlobalRelative points (metres)."""
     dlat = math.radians(b.lat - a.lat)
-    dlng = math.radians(b.lng - a.lng)
+    dlng = math.radians(b.lon - a.lon)
     lat1 = math.radians(a.lat)
     lat2 = math.radians(b.lat)
     a_val = (
@@ -102,7 +102,7 @@ def main():
     # ~111_111 m per degree latitude at equator; good enough for SITL hello
     target = LocationGlobalRelative(
         start.lat + (args.distance / 111111.0),
-        start.lng,
+        start.lon,
         start.alt,
     )
 
@@ -110,9 +110,9 @@ def main():
         "Driving {:.1f} m north: ({:.7f},{:.7f}) -> ({:.7f},{:.7f})".format(
             args.distance,
             start.lat,
-            start.lng,
+            start.lon,
             target.lat,
-            target.lng,
+            target.lon,
         )
     )
     vehicle.simple_goto(target)

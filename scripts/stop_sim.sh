@@ -10,6 +10,7 @@ patterns=(
   "ardurover"
   "mavproxy.py"
   "MAVProxy"
+  "gz sim"
 )
 
 for pat in "${patterns[@]}"; do
